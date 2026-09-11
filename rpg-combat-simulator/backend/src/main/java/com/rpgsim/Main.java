@@ -1,35 +1,68 @@
 package com.rpgsim;
 
+import com.rpgsim.combat.Battle;
 import com.rpgsim.model.Mage;
 import com.rpgsim.model.Warrior;
-import com.rpgsim.skill.Skill;
 
 public class Main {
+
     public static void main(String[] args) {
-        Warrior warrior = new Warrior("Arthur");
+
         Mage mage = new Mage("Merlin");
+        Warrior warrior = new Warrior("Arthur");
 
-        System.out.println("===Mage Test===");
-        
-        for(Skill skill : mage.getSkills()){
-            System.out.println(
-                skill.getName()
-                + " | Mana: "
-                + skill.getManaCost()
-            );
+        Battle battle = new Battle(
+                mage,
+                warrior
+        );
+
+        System.out.println(
+                "First turn: "
+                        + battle.getCurrentTurn().getName()
+        );
+
+        battle.useSkill(
+                "Fireball",
+                warrior
+        );
+
+        battle.useSkill(
+                "Heavy Strike",
+                mage
+        );
+
+        battle.useSkill(
+                "Fireball",
+                warrior
+        );
+
+        battle.useSkill(
+                "Heavy Strike",
+                mage
+        );
+
+        System.out.println("\n=== Battle Log ===");
+
+        for (String entry : battle.getBattleLog()) {
+            System.out.println(entry);
         }
 
-        System.out.println("===Warrior Test===");
+        System.out.println("\n=== Current Stats ===");
 
-        for(Skill skill : warrior.getSkills()){
-            System.out.println(
-                skill.getName()
-                + " | Mana: "
-                + skill.getManaCost()
-            );
-        }
+        System.out.println(
+                mage.getName()
+                        + " HP: "
+                        + mage.getCurrentHp()
+                        + "/"
+                        + mage.getMaxHp()
+        );
 
-        Skill fireball = mage.getSkillByName("Fireball");
-        System.out.println(fireball.execute(mage, warrior));
+        System.out.println(
+                warrior.getName()
+                        + " HP: "
+                        + warrior.getCurrentHp()
+                        + "/"
+                        + warrior.getMaxHp()
+        );
     }
 }
