@@ -25,10 +25,10 @@ public abstract class Character{
         this.name = name;
         
         this.maxHp = maxHp;
-        this.currentHp = currentHp;
+        this.currentHp = maxHp;
 
         this.maxMana = maxMana;
-        this.currentMana = currentMana;
+        this.currentMana = maxMana;
 
         this.attack = attack;
         this.defense = defense;
@@ -97,5 +97,5 @@ public abstract class Character{
         return speed;
     }
 
-    
+
 }
