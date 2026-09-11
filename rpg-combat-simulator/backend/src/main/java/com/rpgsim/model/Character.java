@@ -1,5 +1,10 @@
 package com.rpgsim.model;
 
+import com.rpgsim.skill.Skill;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Character{
     
     private String name;
@@ -13,6 +18,8 @@ public abstract class Character{
     private int attack;
     private int defense;
     private int speed;
+
+    private final List<Skill> skills = new ArrayList<>();
 
     public Character(
         String name,
@@ -33,6 +40,23 @@ public abstract class Character{
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+    }
+
+    public void addSkill(Skill skill){
+        skills.add(skill);
+    }
+
+    public List<Skill> getSkills(){
+        return skills;
+    }
+
+    public Skill getSkillByName(String skillName){
+        for(Skill skill : skills){
+            if(skill.getName().equalsIgnoreCase(skillName)){
+                return skill;
+            }
+        }
+        return null;
     }
 
     public void takeDamage(int damage){
