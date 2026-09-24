@@ -88,9 +88,16 @@ public class Battle {
             return target == currentTurn;
         }
         if(targetType == TargetType.ENEMY){
-            return target != currentTurn;
+            return target == getOpponent();
         }
-        return true;
+        return target == player1 || target == player2;
+    }
+
+    public Character getOpponent(){
+        if(currentTurn == player1){
+            return player2;
+        }
+        return player1;
     }
 
     public Character getWinner(){
