@@ -1,6 +1,7 @@
 package com.rpgsim.model;
 
 import com.rpgsim.skill.Skill;
+import com.rpgsim.skill.DamageSkill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,13 @@ public abstract class Character{
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+
+        addSkill(new DamageSkill(
+            "Basic Attack",
+            0,
+            5
+        ));
+
     }
 
     public void addSkill(Skill skill){
