@@ -1,6 +1,7 @@
 package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
+import com.rpgsim.enums.TargetType;
 
 public class DamageSkill implements Skill{
 
@@ -22,6 +23,11 @@ public class DamageSkill implements Skill{
     @Override
     public int getManaCost(){
         return manaCost;
+    }
+
+    @Override
+    public TargetType getTargetType() {
+        return TargetType.ENEMY;
     }
 
     @Override

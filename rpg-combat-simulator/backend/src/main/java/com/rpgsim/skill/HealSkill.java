@@ -1,6 +1,7 @@
 package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
+import com.rpgsim.enums.TargetType;
 
 public class HealSkill implements Skill{
     
@@ -22,6 +23,11 @@ public class HealSkill implements Skill{
     @Override
     public int getManaCost(){
         return manaCost;
+    }
+
+    @Override
+    public TargetType getTargetType() {
+        return TargetType.SELF;
     }
 
     @Override 

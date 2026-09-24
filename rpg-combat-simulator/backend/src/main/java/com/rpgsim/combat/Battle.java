@@ -2,6 +2,7 @@ package com.rpgsim.combat;
 
 import com.rpgsim.model.Character;
 import com.rpgsim.skill.Skill;
+import com.rpgsim.enums.TargetType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,15 @@ public class Battle {
             return;
         }
 
+        if(!isValidTarget(skill, target)){
+            battleLog.add(
+                "Invalid target for "
+                + skill.getName()
+                + "."
+            );
+            return;
+        }
+
         String result = skill.execute(currentTurn, target);
 
         battleLog.add(result);
@@ -67,6 +77,20 @@ public class Battle {
 
     public boolean isBattleOver(){
         return !player1.isAlive() || ! player2.isAlive();
+    }
+
+    private boolean isValidTarget(
+        Skill skill,
+        Character target
+    ){
+        TargetType targetType = skill.getTargetType();
+        if(targetType == TargetType.SELF){
+            return target == currentTurn;
+        }
+        if(targetType == TargetType.ENEMY){
+            return target != currentTurn;
+        }
+        return true;
     }
 
     public Character getWinner(){
