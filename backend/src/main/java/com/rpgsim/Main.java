@@ -1,6 +1,6 @@
 package com.rpgsim;
 
-import com.rpgsim.combat.Battle;
+// import com.rpgsim.combat.Battle;
 import com.rpgsim.model.Mage;
 import com.rpgsim.model.Warrior;
 import com.rpgsim.skill.Skill;
