@@ -1,5 +1,7 @@
 package com.rpgsim.combat;
 
+import java.util.List;
+
 import com.rpgsim.model.Character;
 import com.rpgsim.model.Warrior;
 import com.rpgsim.model.Mage;
@@ -284,5 +286,63 @@ class BattleTest {
         assertEquals(initialMana, caster.getCurrentMana());
         assertEquals(initialHp, target.getCurrentHp());
         assertSame(caster, battle.getCurrentTurn());
+    }
+
+    @Test // Check to not allow external logging
+    void shouldPreventExternalBattleLogAddition(){
+        Character warrior = new Warrior("Arthur");
+        Character mage = new Mage("Merlin");
+
+        Battle battle = new Battle(warrior, mage);
+
+        List<String> battleLog = battle.getBattleLog();
+
+        int initialLogSize = battleLog.size();
+
+        String fakeEntry = "Fake battle log";
+
+        assertThrows(UnsupportedOperationException.class, () -> battleLog.add(fakeEntry));
+
+        assertEquals(initialLogSize, battle.getBattleLog().size());
+    }
+
+    @Test // Check to not allow external clearing of log
+    void shouldPreventExternalBattleLogClearing(){
+        Character warrior = new Warrior("Arthur");
+        Character mage = new Mage("Merlin");
+
+        Battle battle = new Battle(warrior, mage);
+
+        String skillName = "Basic Attack";
+
+        battle.useSkill(skillName, battle.getOpponent());
+
+        List<String> battleLog = battle.getBattleLog();
+
+        int initialLogSize = battleLog.size();
+
+        assertFalse(battleLog.isEmpty());
+
+        assertThrows(UnsupportedOperationException.class, () -> battleLog.clear());
+
+        assertEquals(initialLogSize, battle.getBattleLog().size());
+    }
+
+    @Test // Check previous retrieved remains
+    void shouldReturnIndependentBattleLogSnapshot(){
+        Character warrior = new Warrior("Arthur");
+        Character mage = new Mage("Merlin");
+
+        Battle battle = new Battle(warrior, mage);
+
+        List<String> originalLog = battle.getBattleLog();
+        int originalLogSize = originalLog.size();
+
+        String skillName = "Basic Attack";
+
+        battle.useSkill(skillName, battle.getOpponent());
+
+        assertEquals(originalLogSize, originalLog.size());
+        assertTrue(battle.getBattleLog().size() > originalLogSize);
     }
 }

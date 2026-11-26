@@ -1,5 +1,10 @@
 package com.rpgsim.model;
 
+import java.util.List;
+
+import com.rpgsim.skill.Skill;
+import com.rpgsim.skill.DamageSkill;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -197,5 +202,92 @@ class CharacterTest {
         mage.heal(healingAmount);
 
         assertEquals(expectedHp, mage.getCurrentHp());
+    }
+
+    @Test // Check to not allow adding skills using getters
+    void shouldPreventExternalSkillAddition(){
+        Character mage = new Mage("Merlin");
+
+        int initialSkillCount = mage.getSkills().size();
+
+        int manaCost = 0;
+        int baseDamage = 20;
+
+        Skill newSkill = new DamageSkill("External Skill", manaCost, baseDamage);
+
+        List<Skill> skills = mage.getSkills();
+
+        assertThrows(UnsupportedOperationException.class, () -> skills.add(newSkill));
+
+        assertEquals(initialSkillCount, mage.getSkills().size());
+    }
+
+    @Test // Check to not allow remove skills using getters
+    void shouldPreventExternalSkillRemoval(){
+        Character mage = new Mage("Merlin");
+
+        List<Skill> skills = mage.getSkills();
+
+        int initialSkillCount = skills.size();
+
+        Skill existingSkill = skills.get(0);
+
+        assertThrows(UnsupportedOperationException.class, () -> skills.remove(existingSkill));
+
+        assertEquals(initialSkillCount, mage.getSkills().size());
+    }
+
+    @Test // Check to not allow clearing skills through getters
+    void shouldPreventExternalSkillClearing(){
+        Character mage = new Mage("Merlin");
+
+        List<Skill> skills = mage.getSkills();
+
+        int initialSkillCount = skills.size();
+
+        assertThrows(UnsupportedOperationException.class, () -> skills.clear());
+
+        assertEquals(initialSkillCount, mage.getSkills().size());
+    }
+
+    @Test // Check to allow adding skills through normal method
+    void shouldAllowSkillAdditionThroughAddSkill(){
+        Character mage = new Mage("Merlin");
+
+        int initialSkillCount = mage.getSkills().size();
+        int additionalSkillCount = 1;
+
+        int manaCost = 0;
+        int baseDamage = 20;
+
+        Skill newSkill = new DamageSkill("New Skill", manaCost, baseDamage);
+
+        int expectedSkillCount = initialSkillCount + additionalSkillCount;
+
+        mage.addSkill(newSkill);
+
+        assertEquals(expectedSkillCount, mage.getSkills().size());
+        assertTrue(mage.getSkills().contains(newSkill));
+    }
+
+    @Test // Check previous retrieved remains
+    void shouldReturnIndependentSkillSnapshot(){
+        Character mage = new Mage("Merlin");
+
+        List<Skill> originalSkills = mage.getSkills();
+
+        int originalSkillCount = originalSkills.size();
+
+        int manaCost = 0;
+        int baseDamage = 20;
+
+        Skill newSkill = new DamageSkill("New Skill", manaCost, baseDamage);
+
+        mage.addSkill(newSkill);
+
+        assertEquals(originalSkillCount, originalSkills.size());
+
+        assertFalse(originalSkills.contains(newSkill));
+        assertTrue(mage.getSkills().contains(newSkill));
     }
 }
