@@ -63,7 +63,7 @@ public abstract class Character{
     }
 
     public List<Skill> getSkills(){
-        return skills;
+        return List.copyOf(skills);
     }
 
     public Skill getSkillByName(String skillName){

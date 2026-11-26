@@ -138,6 +138,6 @@ public class Battle {
     }
 
     public List<String> getBattleLog(){
-        return battleLog;
+        return List.copyOf(battleLog);
     }
 }
