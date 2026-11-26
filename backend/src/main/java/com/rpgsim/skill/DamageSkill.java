@@ -31,9 +31,9 @@ public class DamageSkill implements Skill{
     }
 
     @Override
-    public String execute(Character caster, Character target){
+    public SkillResult execute(Character caster, Character target){
         if(!caster.hasEnoughmana(manaCost)){
-            return caster.getName() + " does not have enough mana.";
+            return new SkillResult(false, caster.getName() + " does not have enough mana!");
         }
 
         caster.useMana(manaCost);
@@ -46,13 +46,10 @@ public class DamageSkill implements Skill{
 
         target.takeDamage(damage);
 
-        return caster.getName()
-                + " used "
-                + name
-                + " on "
-                + target.getName()
-                + " for "
-                + damage
-                + " damage.";
+        return new SkillResult(
+                true, 
+                caster.getName() + " used " + name + " and dealt "
+                + damage + " damage to " + target.getName()
+            );
     }
 }

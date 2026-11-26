@@ -2,6 +2,7 @@ package com.rpgsim.combat;
 
 import com.rpgsim.model.Character;
 import com.rpgsim.skill.Skill;
+import com.rpgsim.skill.SkillResult;
 import com.rpgsim.enums.TargetType;
 
 import java.util.ArrayList;
@@ -62,9 +63,13 @@ public class Battle {
             return;
         }
 
-        String result = skill.execute(currentTurn, target);
+        SkillResult result = skill.execute(currentTurn, target);
 
-        battleLog.add(result);
+        battleLog.add(result.getMessage());
+
+        if(!result.isSuccess()){
+            return;
+        }
 
         if(!target.isAlive()){
             battleLog.add(target.getName() + " has been defeated.");

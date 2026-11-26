@@ -7,5 +7,5 @@ public interface Skill {
     String getName();
     int getManaCost();
     TargetType getTargetType();
-    String execute(Character caster, Character target);
+    SkillResult execute(Character caster, Character target);
 }
