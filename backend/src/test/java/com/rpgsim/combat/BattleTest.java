@@ -257,5 +257,32 @@ class BattleTest {
         assertSame(attacker, battle.getWinner());
     }
 
-    
+    @Test // Check if insufficient mana, casting should not switch turns
+    void shouldNotSwitchTurnWhenManaIsInsufficient(){
+        int slowerSpeed = 10;
+        int fasterSpeed = 20;
+
+        Character caster = new TestCharacter("Caster", fasterSpeed);
+        Character target = new TestCharacter("Target", slowerSpeed);
+
+        int additionalMana = 1;
+        int manaCost = caster.getCurrentMana() + additionalMana;
+
+        int baseDamage = 35;
+
+        Skill expensiveSkill = new DamageSkill("Expensive Skill", manaCost, baseDamage);
+
+        caster.addSkill(expensiveSkill);
+
+        Battle battle = new Battle(caster, target);
+
+        int initialMana = caster.getCurrentMana();
+        int initialHp = target.getCurrentHp();
+
+        battle.useSkill(expensiveSkill.getName(), target);
+
+        assertEquals(initialMana, caster.getCurrentMana());
+        assertEquals(initialHp, target.getCurrentHp());
+        assertSame(caster, battle.getCurrentTurn());
+    }
 }
