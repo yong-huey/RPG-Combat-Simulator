@@ -50,6 +50,14 @@ public abstract class Character{
 
     }
 
+    private void validateNonNegative(int amount, String fieldName){
+        if (amount < 0){
+            throw new IllegalArgumentException(
+                fieldName + " cannot be negative."
+            );
+        }
+    }
+
     public void addSkill(Skill skill){
         skills.add(skill);
     }
@@ -68,6 +76,7 @@ public abstract class Character{
     }
 
     public void takeDamage(int damage){
+        validateNonNegative(damage, "Damage");
         currentHp -= damage;
         if(currentHp < 0){
             currentHp = 0;
@@ -75,10 +84,8 @@ public abstract class Character{
     }
 
     public void heal(int amount){
-        currentHp += amount;
-        if(currentHp > maxHp){
-            currentHp = maxHp;
-        }
+        validateNonNegative(amount, "Healing");
+        currentHp += Math.min(amount, maxHp - currentHp);
     }
 
     public boolean isAlive(){
@@ -86,11 +93,12 @@ public abstract class Character{
     }
 
     public boolean hasEnoughmana(int manaCost){
+        validateNonNegative(manaCost, "Mana cost");
         return currentMana >= manaCost;
     }
 
     public void useMana(int amount){
-        if(amount > currentMana){
+        if(!hasEnoughmana(amount)){
             throw new IllegalArgumentException("Not Enough Mana");
         }
 

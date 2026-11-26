@@ -183,4 +183,19 @@ class CharacterTest {
 
         assertTrue(hasEnoughMana);
     }
+
+    @Test // Check for integer overflow for healing
+    void shouldPreventIntegerOverflowWhenHealing(){
+        Character mage = new Mage("Merlin");
+
+        int damage = mage.getMaxHp() / 2;
+        mage.takeDamage(damage);
+
+        int healingAmount = Integer.MAX_VALUE;
+        int expectedHp = mage.getMaxHp();
+
+        mage.heal(healingAmount);
+
+        assertEquals(expectedHp, mage.getCurrentHp());
+    }
 }
