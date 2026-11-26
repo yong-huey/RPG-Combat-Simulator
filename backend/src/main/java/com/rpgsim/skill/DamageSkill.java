@@ -3,26 +3,18 @@ package com.rpgsim.skill;
 import com.rpgsim.model.Character;
 import com.rpgsim.enums.TargetType;
 
-public class DamageSkill implements Skill{
+public class DamageSkill extends AbstractSkill{
 
-    private final String name;
-    private final int manaCost;
     private final int baseDamage;
 
     public DamageSkill(String name, int manaCost, int baseDamage){
-        this.name = name;
-        this.manaCost = manaCost;
+        super(name, manaCost);
+
+        if(baseDamage < 0){
+            throw new IllegalArgumentException("Base damage cannot be negative.");
+        }
+
         this.baseDamage = baseDamage;
-    }
-
-    @Override
-    public String getName(){
-        return name;
-    }
-
-    @Override
-    public int getManaCost(){
-        return manaCost;
     }
 
     @Override
@@ -32,11 +24,11 @@ public class DamageSkill implements Skill{
 
     @Override
     public SkillResult execute(Character caster, Character target){
-        if(!caster.hasEnoughmana(manaCost)){
+        if(!caster.hasEnoughmana(getManaCost())){
             return new SkillResult(false, caster.getName() + " does not have enough mana!");
         }
 
-        caster.useMana(manaCost);
+        caster.useMana(getManaCost());
 
         int damage = baseDamage + caster.getAttack() - target.getDefense();
 
@@ -48,7 +40,7 @@ public class DamageSkill implements Skill{
 
         return new SkillResult(
                 true, 
-                caster.getName() + " used " + name + " and dealt "
+                caster.getName() + " used " + getName() + " and dealt "
                 + damage + " damage to " + target.getName()
             );
     }
