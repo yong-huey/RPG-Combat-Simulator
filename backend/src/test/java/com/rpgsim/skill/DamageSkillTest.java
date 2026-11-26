@@ -5,12 +5,8 @@ import com.rpgsim.model.Warrior;
 import com.rpgsim.model.Mage;
 import com.rpgsim.enums.TargetType;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DamageSkillTest {
     @Test // Check correct damage dealt
