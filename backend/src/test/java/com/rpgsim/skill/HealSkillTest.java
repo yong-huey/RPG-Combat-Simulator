@@ -7,10 +7,6 @@ import com.rpgsim.enums.TargetType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.annotation.Target;
-
-import javax.naming.ldap.ManageReferralControl;
-
 class HealSkillTest {
     @Test // Check correct healing amount
     void shouldRestoreCorrectAmountOfHealth(){
