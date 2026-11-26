@@ -157,4 +157,69 @@ class HealSkillTest {
         assertEquals(expectedHp, caster.getCurrentHp());
         assertEquals(0, caster.getCurrentMana());
     }
+
+    @Test // Check to reject negative mana cost
+    void shouldRejectNegativeManaCost(){
+        String skillName = "Test Heal Skill";
+        int invalidManaCost = -10;
+        int healAmount = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(skillName, invalidManaCost, healAmount));
+    }
+
+    @Test // Check to reject negative healing
+    void shouldRejectNegativeHealingAmount(){
+        String skillName = "Test Heal Skill";
+        int manaCost = 10;
+        int invalidHealAmount = -20;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(skillName, manaCost, invalidHealAmount));
+    }
+
+    @Test // Check to reject null skill name
+    void shouldRejectNullSkillName(){
+        String invalidName = null;
+        int manaCost = 10;
+        int healAmount = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(invalidName, manaCost, healAmount));
+    }
+
+    @Test // Check to reject empty skill name
+    void shouldRejectEmptySkillName(){
+        String invalidName = "";
+        int manaCost = 10;
+        int healAmount = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(invalidName, manaCost, healAmount));
+    }
+
+    @Test // Check to reject blank skill name
+    void shouldRejectBlankSkillName(){
+        String invalidName = "   ";
+        int manaCost = 10;
+        int healAmount = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(invalidName, manaCost, healAmount));
+    }
+
+    @Test // Check to allow zero mana cost
+    void shouldAllowZeroManaCost(){
+        String skillName = "Test Heal Skill";
+        int manaCost = 0;
+        int healAmount = 20;
+
+        Skill skill = assertDoesNotThrow(() -> new HealSkill(skillName, manaCost, healAmount));
+
+        assertEquals(manaCost, skill.getManaCost());
+    }
+
+    @Test // Check to allow zero heal
+    void shouldAllowZeroHealingAmount(){
+        String skillName = "Test Heal Skill";
+        int manaCost = 10;
+        int healAmount = 0;
+
+        assertDoesNotThrow(() -> new HealSkill(skillName, manaCost, healAmount));
+    }
 }

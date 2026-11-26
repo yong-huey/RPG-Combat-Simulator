@@ -146,4 +146,69 @@ class DamageSkillTest {
         assertEquals(0, caster.getCurrentMana());
         assertTrue(target.getCurrentHp() < initialHp);
     }
+
+    @Test // Check to reject negative mana cost
+    void shouldRejectNegativeManaCost(){
+        String skillName = "Test Damage Skill";
+        int invalidManaCost = -10;
+        int baseDamage = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(skillName, invalidManaCost, baseDamage));
+    }
+
+    @Test // Check to reject negative base damage
+    void shouldRejectNegativeBaseDamage(){
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int invalidBaseDamage = -20;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(skillName, manaCost, invalidBaseDamage));
+    }
+
+    @Test // Check to reject null skill name
+    void shouldRejectNullSkillName(){
+        String invalidName = null;
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(invalidName, manaCost, baseDamage));
+    }
+
+    @Test // Check to reject empty skill name
+    void shouldRejectEmptySkillName(){
+        String invalidName = "";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(invalidName, manaCost, baseDamage));
+    }
+
+    @Test // Check to reject blank skill name
+    void shouldRejectBlankSkillName(){
+        String invalidName = "   ";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(invalidName, manaCost, baseDamage));
+    }
+
+    @Test // Check to allow zero mana cost
+    void shouldAllowZeroManaCost(){
+        String skillName = "Test Damage Skill";
+        int manaCost = 0;
+        int baseDamage = 20;
+
+        Skill skill = assertDoesNotThrow(() -> new DamageSkill(skillName, manaCost, baseDamage));
+
+        assertEquals(manaCost, skill.getManaCost());
+    }
+
+    @Test // Check to allow zero base damage
+    void shouldAllowZeroBaseDamage(){
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 0;
+
+        assertDoesNotThrow(() -> new DamageSkill(skillName, manaCost, baseDamage));
+    }
 }
