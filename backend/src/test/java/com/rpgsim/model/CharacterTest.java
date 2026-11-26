@@ -91,4 +91,96 @@ class CharacterTest {
 
         assertEquals(initialMana, mage.getCurrentMana());
     }
+
+    @Test // Check to reject negative damage
+    void shouldRejectNegativeDamage(){
+        Character warrior = new Warrior("Arthur");
+
+        int initialHp = warrior.getCurrentHp();
+        int invalidDamage = -30;
+
+        assertThrows(IllegalArgumentException.class, () -> warrior.takeDamage(invalidDamage));
+
+        assertEquals(initialHp, warrior.getCurrentHp());
+    }
+
+    @Test // Check to reject negative heal
+    void shouldRejectNegativeHealing(){
+        Character mage = new Mage("Merlin");
+
+        int initialHp = mage.getCurrentHp();
+        int invalidHeal = -30;
+
+        assertThrows(IllegalArgumentException.class, () -> mage.heal(invalidHeal));
+
+        assertEquals(initialHp, mage.getCurrentHp());
+    }
+
+    @Test // Check to reject negative mana consumption
+    void shouldRejectNegativeManaConsumption(){
+        Character mage = new Mage("Merlin");
+
+        int initialMana = mage.getCurrentMana();
+        int invalidMana = -20;
+
+        assertThrows(IllegalArgumentException.class, () -> mage.useMana(invalidMana));
+
+        assertEquals(initialMana, mage.getCurrentMana());
+    }
+
+    @Test // Check to reject negative mana requirement
+    void shouldRejectNegativeManaRequirement(){
+        Character mage = new Mage("Merlin");
+
+        int invalidManaCost = -20;
+
+        assertThrows(IllegalArgumentException.class, () -> mage.hasEnoughmana(invalidManaCost));
+    }
+
+    @Test // Check when zero damage dealt, maintain health
+    void shouldMaintainHealthWhenDamageIsZero(){
+        Character warrior = new Warrior("Arthur");
+
+        int initialHp = warrior.getCurrentHp();
+
+        warrior.takeDamage(0);
+
+        assertEquals(initialHp, warrior.getCurrentHp());
+    }
+
+    @Test // Check when zero heal done, maintain health
+    void shouldMaintainHealthWhenHealIsZero(){
+        Character mage = new Mage("Merlin");
+
+        int damage = mage.getCurrentHp() / 2;
+        mage.takeDamage(damage);
+
+        int initialHp = mage.getCurrentHp();
+
+        mage.heal(0);
+
+        assertEquals(initialHp, mage.getCurrentHp());
+    }
+
+    @Test // Check when zero mana consume, mana maintain
+    void shouldMaintainManaWhenCostIsZero(){
+        Character mage = new Mage("Merlin");
+
+        int initialMana = mage.getCurrentMana();
+
+        mage.useMana(0);
+
+        assertEquals(initialMana, mage.getCurrentMana());
+    }
+
+    @Test // Check character still can use zero mana skills
+    void shouldHaveEnoughManaForZeroCost(){
+        Character mage = new Mage("Merlin");
+        
+        mage.useMana(mage.getCurrentMana());
+
+        boolean hasEnoughMana = mage.hasEnoughmana(0);
+
+        assertTrue(hasEnoughMana);
+    }
 }
