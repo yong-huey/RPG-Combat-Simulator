@@ -17,6 +17,18 @@ public class Battle {
     private final List<String> battleLog = new ArrayList<>();
 
     public Battle(Character player1, Character player2){
+        if(player1 == null || player2 == null){
+            throw new IllegalArgumentException("Battle participants cannot be null.");
+        }
+
+        if(player1 == player2){
+            throw new IllegalArgumentException("A character cannot battle itself.");
+        }
+
+        if(!player1.isAlive() || !player2.isAlive()){
+            throw new IllegalArgumentException("Both battle participants must be alive.");
+        }
+
         this.player1 = player1;
         this.player2 = player2;
 
