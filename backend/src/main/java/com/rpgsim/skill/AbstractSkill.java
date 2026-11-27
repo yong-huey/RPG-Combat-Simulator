@@ -1,5 +1,7 @@
 package com.rpgsim.skill;
 
+import com.rpgsim.model.Character;
+
 public abstract class AbstractSkill implements Skill{
     private final String name;
     private final int manaCost;
@@ -24,5 +26,18 @@ public abstract class AbstractSkill implements Skill{
     @Override 
     public int getManaCost(){
         return manaCost;
+    }
+
+    protected SkillResult validateExecution(Character caster, Character target){
+        if(!caster.isAlive()){
+            return new SkillResult(false, caster.getName() + " is defeated and cannot use skills.");
+        }
+        if(!target.isAlive()){
+            return new SkillResult(false, target.getName() + " is already defeated.");
+        }
+        if(!caster.hasEnoughmana(getManaCost())){
+            return new SkillResult(false, caster.getName() + " has insufficient mana.");
+        }
+        return new SkillResult(true, "Skill execution validated successfully.");
     }
 }

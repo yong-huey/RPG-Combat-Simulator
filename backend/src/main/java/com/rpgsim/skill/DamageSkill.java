@@ -24,8 +24,9 @@ public class DamageSkill extends AbstractSkill{
 
     @Override
     public SkillResult execute(Character caster, Character target){
-        if(!caster.hasEnoughmana(getManaCost())){
-            return new SkillResult(false, caster.getName() + " does not have enough mana!");
+        SkillResult validation = validateExecution(caster, target);
+        if(!validation.isSuccess()){
+            return validation;
         }
 
         caster.useMana(getManaCost());
