@@ -290,4 +290,19 @@ class CharacterTest {
         assertFalse(originalSkills.contains(newSkill));
         assertTrue(mage.getSkills().contains(newSkill));
     }
+
+    @Test // Check revive character
+    void shouldNotReviveDefeatedCharacterThroughHealing(){
+        Character character = new Warrior("Arthur");
+        
+        int lethalDamage = character.getCurrentHp();
+        character.takeDamage(lethalDamage);
+
+        int healAmount = character.getMaxHp();
+        
+        character.heal(healAmount);
+
+        assertEquals(0, character.getCurrentHp());
+        assertFalse(character.isAlive());
+    }
 }

@@ -222,4 +222,74 @@ class HealSkillTest {
 
         assertDoesNotThrow(() -> new HealSkill(skillName, manaCost, healAmount));
     }
+
+    @Test // Check to report actual heal
+    void shouldReportActualHealingWhenOverhealing(){
+        Character caster = new Mage("Merlin");
+
+        int damage = caster.getCurrentHp() / 2;
+        caster.takeDamage(damage);
+
+        int initialHp = caster.getCurrentHp();
+
+        String skillName = "Overheal Skill";
+        int manaCost = 0;
+        int healAmount = caster.getMaxHp();
+
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertTrue(result.isSuccess());
+        assertEquals(caster.getMaxHp(), caster.getCurrentHp());
+
+        int actualHealing = caster.getCurrentHp() - initialHp;
+
+        assertTrue(result.getMessage().contains(" " + actualHealing + " HP"));
+    }
+
+    @Test // Check to report no healing when full health
+    void shouldReportZeroHealingWhenAtFullHealth(){
+        Character caster = new Mage("Merlin");
+        
+        int initialHp = caster.getCurrentHp();
+        int manaCost = caster.getCurrentMana();
+        int healAmount = caster.getMaxHp();
+
+        String skillName = "Test Heal Skill";
+
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertTrue(result.isSuccess());
+        assertEquals(initialHp, caster.getCurrentHp());
+        assertEquals(0, caster.getCurrentMana());
+
+        int expectedHealing = 0;
+
+        assertTrue(result.getMessage().contains(" " + expectedHealing + " HP"));
+    }
+
+    @Test // Check to allow zero healing
+    void shouldMaintainHealthWhenExecutingZeroHealingSkill(){
+        Character caster = new Mage("Merlin");
+
+        int damage = caster.getCurrentHp() / 2;
+        caster.takeDamage(damage);
+
+        int initialHp = caster.getCurrentHp();
+        int initialMana = caster.getCurrentMana();
+
+        String skillName = "Test Heal Skill";
+        int manaCost = 0;
+        int healAmount = 0;
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertTrue(result.isSuccess());
+        assertEquals(initialHp, caster.getCurrentHp());
+        assertEquals(initialMana, caster.getCurrentMana());
+    }
 }

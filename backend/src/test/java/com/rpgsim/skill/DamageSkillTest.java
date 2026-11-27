@@ -211,4 +211,44 @@ class DamageSkillTest {
 
         assertDoesNotThrow(() -> new DamageSkill(skillName, manaCost, baseDamage));
     }
+
+    @Test // Check to prevent integer overflow when calculating damage
+    void shouldPreventIntegerOverflowWhenCalculatingDamage(){
+        Character target = new Mage("Merlin");
+        Character caster = new Warrior("Arthur");
+
+        String skillName = "Overflow Damage Skill";
+        int manaCost = 0;
+        int baseDamage = Integer.MAX_VALUE;
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        skill.execute(caster, target);
+
+        assertEquals(0, target.getCurrentHp());
+        assertFalse(target.isAlive());
+    }
+
+    @Test // Check to report actual damage
+    void shouldReportActualDamageDealt(){
+        Character caster = new Mage("Merlin");
+        Character target = new Warrior("Arthur");
+
+        int initialHp = target.getCurrentHp();
+
+        String skillName = "Overkill Skill";
+        int manaCost = 0;
+        int baseDamage = initialHp + target.getDefense();
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        SkillResult result = skill.execute(caster, target);
+
+        assertTrue(result.isSuccess());
+        assertEquals(0, target.getCurrentHp());
+
+        int actualDamage = initialHp - target.getCurrentHp();
+
+        assertTrue(result.getMessage().contains(" " + actualDamage + " damage"));
+    }
 }
