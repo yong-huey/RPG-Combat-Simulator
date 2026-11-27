@@ -2,6 +2,8 @@
 # Java / Maven
 # =========================
 target/
+target_classes/
+target_test-classes/
 *.class
 *.jar
 *.war
