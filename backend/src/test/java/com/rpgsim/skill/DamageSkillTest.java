@@ -4,6 +4,7 @@ import com.rpgsim.model.Character;
 import com.rpgsim.model.Warrior;
 import com.rpgsim.model.Mage;
 import com.rpgsim.enums.TargetType;
+import com.rpgsim.fixture.TestCharacter;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,8 +52,16 @@ class DamageSkillTest {
 
     @Test // Check deal minimum damage
     void shouldDealMinimumDamage(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        int maxHp = 100;
+        int maxMana = 100;
+        int speed = 10;
+        int casterAttack = 10;
+        int casterDefense = 5;
+        int targetAttack = 15;
+        int targetDefense = 20;
+
+        Character caster = new TestCharacter("Caster", maxHp, maxMana, casterAttack, casterDefense, speed);
+        Character target = new TestCharacter("Target", maxHp, maxMana, targetAttack, targetDefense, speed);
 
         int manaCost = 0;
         int baseDamage = 0;
@@ -214,8 +223,16 @@ class DamageSkillTest {
 
     @Test // Check to prevent integer overflow when calculating damage
     void shouldPreventIntegerOverflowWhenCalculatingDamage(){
-        Character target = new Mage("Merlin");
-        Character caster = new Warrior("Arthur");
+        int maxHp = 100;
+        int maxMana = 100;
+        int speed = 10;
+        int casterAttack = 25;
+        int casterDefense = 10;
+        int targetAttack = 15;
+        int targetDefense = 5;
+
+        Character caster = new TestCharacter("Caster", maxHp, maxMana, casterAttack, casterDefense, speed);
+        Character target = new TestCharacter("Target", maxHp, maxMana, targetAttack, targetDefense, speed);
 
         String skillName = "Overflow Damage Skill";
         int manaCost = 0;
