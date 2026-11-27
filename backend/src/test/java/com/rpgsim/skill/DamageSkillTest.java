@@ -251,4 +251,84 @@ class DamageSkillTest {
 
         assertTrue(result.getMessage().contains(" " + actualDamage + " damage"));
     }
+
+    @Test // Check successful damage skill result
+    void shouldReturnSuccessWhenDamageSkillExecutes(){
+        Character caster = new Mage("Merlin");
+        Character target = new Warrior("Arthur");
+
+        String skillName = "Test Damage Skill";
+        int manaCost = caster.getCurrentMana() / 2;
+        int baseDamage = 20;
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        SkillResult result = skill.execute(caster, target);
+
+        assertTrue(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+    }
+
+    @Test // Check failed damage skill result
+    void shouldReturnFailedWhenManaIsInsufficient(){
+        Character caster = new Mage("Merlin");
+        Character target = new Warrior("Arthur");
+
+        int additionalManaRequired = 1;
+        int manaCost = caster.getCurrentMana() + additionalManaRequired;
+        int baseDamage = 20;
+        String skillName = "Expensive Damage Skill";
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+        
+        SkillResult result = skill.execute(caster, target);
+
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+    }
+
+    @Test // Check defeated caster cannot attack
+    void shouldRejectDamageSkillFromDefeatedCaster(){
+        Character caster = new Mage("Merlin");
+        Character target = new Warrior("Arthur");
+
+        int lethalDamage = caster.getCurrentHp();
+        caster.takeDamage(lethalDamage);
+
+        int initialMana = caster.getCurrentMana();
+        int initialTargetHp = target.getCurrentHp();
+        
+        String skillName = "Test Skill";
+        int manaCost = initialMana / 2;
+        int baseDamage = 20;
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        SkillResult result = skill.execute(caster, target);
+
+        assertFalse(result.isSuccess());
+        assertEquals(initialMana, caster.getCurrentMana());
+        assertEquals(initialTargetHp, target.getCurrentHp());
+    }
+
+    @Test // Check damage skill cannot target defeated character
+    void shouldRejectDamageSkillAgainstDefeatedTarget(){
+        Character caster = new Mage("Merlin");
+        Character target = new Warrior("Arthur");
+
+        int lethalDamage = target.getCurrentHp();
+        target.takeDamage(lethalDamage);
+
+        int initialMana = caster.getCurrentMana();
+        String skillName = "Test Skill";
+        int manaCost = initialMana / 2;
+        int baseDamage = 20;
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        SkillResult result = skill.execute(caster, target);
+
+        assertFalse(result.isSuccess());
+        assertEquals(initialMana, caster.getCurrentMana());
+        assertEquals(0, target.getCurrentHp());
+    }
 }

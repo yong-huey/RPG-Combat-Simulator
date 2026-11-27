@@ -292,4 +292,62 @@ class HealSkillTest {
         assertEquals(initialHp, caster.getCurrentHp());
         assertEquals(initialMana, caster.getCurrentMana());
     }
+
+    @Test // Check successful healing skill result
+    void shouldReturnSuccessWhenHealSkillExecuted(){
+        Character caster = new Mage("Merlin");
+        int damage = caster.getCurrentHp() / 2;
+        caster.takeDamage(damage);
+
+        String skillName = "Test Heal Skill";
+        int manaCost = caster.getCurrentMana() / 2;
+        int healAmount = damage;
+
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertTrue(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+    }
+
+    @Test // Check failed healing skill result
+    void shouldReturnFailureWhenManaIsInsufficient(){
+        Character caster = new Mage("Merlin");
+        int additionalManaRequired = 1;
+        int manaCost = caster.getCurrentMana() + additionalManaRequired;
+        int healAmount = 20;
+        String skillName = "Expensive Heal Skill";
+
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+    }
+
+    @Test // Check defeated caster cannot heal
+    void shouldRejectHealingSkillFromDefeatedCaster(){
+        Character caster = new Mage("Merlin");
+
+        int lethalDamage = caster.getCurrentHp();
+        caster.takeDamage(lethalDamage);
+
+        int initialMana = caster.getCurrentMana();
+
+        String skillName = "Test Heal Skill";
+        int manaCost = initialMana / 2;
+        int healAmount = caster.getMaxHp();
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertFalse(result.isSuccess());
+        assertEquals(initialMana, caster.getCurrentMana());
+        assertEquals(0, caster.getCurrentHp());
+        assertFalse(caster.isAlive());
+    }
 }
