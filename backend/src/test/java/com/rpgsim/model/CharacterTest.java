@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rpgsim.skill.Skill;
 import com.rpgsim.skill.DamageSkill;
+import com.rpgsim.fixture.TestCharacter;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,197 +12,198 @@ import static org.junit.jupiter.api.Assertions.*;
 class CharacterTest {
     @Test // Check starting health
     void shouldStartWithFullHealth(){
-        Character warrior = new Warrior("Authur");
+        Character character = new TestCharacter("Test Character");
 
-        assertEquals(warrior.getMaxHp(), warrior.getCurrentHp());
+        assertEquals(character.getMaxHp(), character.getCurrentHp());
     }
 
     @Test // Check damage taken
     void shouldReduceHealthWhenTakingDamage(){
         // Arrange
-        Character warrior = new Warrior("Authur");
+        Character character = new TestCharacter("Test Character");
+        int initialHp = character.getCurrentHp();
         int damage = 30;
-        int expectedHp = warrior.getCurrentHp() - damage;
+        int expectedHp = initialHp - damage;
 
         // Act
-        warrior.takeDamage(damage);
+        character.takeDamage(damage);
 
         // Assert
-        assertEquals(expectedHp, warrior.getCurrentHp());
+        assertEquals(expectedHp, character.getCurrentHp());
     }
 
     @Test // Check no negative health
     void shouldNotHaveNegativeHealth(){
-        Character warrior = new Warrior("Authur");
-        int lethalDamage = warrior.getCurrentHp() + 1;
+        Character character = new TestCharacter("Test Character");
+        int lethalDamage = character.getCurrentHp() + 1;
 
-        warrior.takeDamage(lethalDamage);
+        character.takeDamage(lethalDamage);
 
-        assertEquals(0, warrior.getCurrentHp());
+        assertEquals(0, character.getCurrentHp());
     }
 
     @Test // Check defeated
     void shouldBeDefeatedWhenHealthReachesZero(){
-        Character warrior = new Warrior("Authur");
-        int lethalDamage = warrior.getCurrentHp() + 1;
+        Character character = new TestCharacter("Test Character");
+        int lethalDamage = character.getCurrentHp() + 1;
 
-        warrior.takeDamage(lethalDamage);
+        character.takeDamage(lethalDamage);
 
-        assertFalse(warrior.isAlive());
+        assertFalse(character.isAlive());
     }
 
     @Test // Check healing
     void shouldRestoreHealthWhenHealed(){
-        Character warrior = new Warrior("Arthur");
+        Character character = new TestCharacter("Test Character");
         int damage = 50;
         int healing = 30;
-        int expectedHp = warrior.getCurrentHp() - damage + healing;
+        int expectedHp = character.getCurrentHp() - damage + healing;
 
-        warrior.takeDamage(damage);
-        warrior.heal(healing);
+        character.takeDamage(damage);
+        character.heal(healing);
 
-        assertEquals(expectedHp, warrior.getCurrentHp());
+        assertEquals(expectedHp, character.getCurrentHp());
     }
 
     @Test // Check heal does not exceed max health
     void shouldNotExceedMaximumHealth(){
-        Character warrior = new Warrior("Authur");
+        Character character = new TestCharacter("Test Character");
         int damage = 20;
         int healing = 100;
 
-        warrior.takeDamage(damage);
-        warrior.heal(healing);
+        character.takeDamage(damage);
+        character.heal(healing);
 
-        assertEquals(warrior.getMaxHp(), warrior.getCurrentHp());
+        assertEquals(character.getMaxHp(), character.getCurrentHp());
     }
 
     @Test // Check for mana reduction when used
     void shouldReduceManaWhenUsed(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
         int manaCost = 20;
-        int expectedMana = mage.getCurrentMana() - manaCost;
+        int expectedMana = character.getCurrentMana() - manaCost;
 
-        mage.useMana(manaCost);
+        character.useMana(manaCost);
 
-        assertEquals(expectedMana, mage.getCurrentMana());
+        assertEquals(expectedMana, character.getCurrentMana());
     }
 
     @Test // Check insufficient mana
     void shouldThrowExceptionWhenManaIsInsufficient(){
-        Character mage = new Mage("Merlin");
-        int initialMana = mage.getCurrentMana();
+        Character character = new TestCharacter("Test Character");
+        int initialMana = character.getCurrentMana();
         int manaCost = initialMana + 1;
 
-        assertThrows(IllegalArgumentException.class, () -> mage.useMana(manaCost));
+        assertThrows(IllegalArgumentException.class, () -> character.useMana(manaCost));
 
-        assertEquals(initialMana, mage.getCurrentMana());
+        assertEquals(initialMana, character.getCurrentMana());
     }
 
     @Test // Check to reject negative damage
     void shouldRejectNegativeDamage(){
-        Character warrior = new Warrior("Arthur");
+        Character character = new TestCharacter("Test Character");
 
-        int initialHp = warrior.getCurrentHp();
+        int initialHp = character.getCurrentHp();
         int invalidDamage = -30;
 
-        assertThrows(IllegalArgumentException.class, () -> warrior.takeDamage(invalidDamage));
+        assertThrows(IllegalArgumentException.class, () -> character.takeDamage(invalidDamage));
 
-        assertEquals(initialHp, warrior.getCurrentHp());
+        assertEquals(initialHp, character.getCurrentHp());
     }
 
     @Test // Check to reject negative heal
     void shouldRejectNegativeHealing(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
 
-        int initialHp = mage.getCurrentHp();
+        int initialHp = character.getCurrentHp();
         int invalidHeal = -30;
 
-        assertThrows(IllegalArgumentException.class, () -> mage.heal(invalidHeal));
+        assertThrows(IllegalArgumentException.class, () -> character.heal(invalidHeal));
 
-        assertEquals(initialHp, mage.getCurrentHp());
+        assertEquals(initialHp, character.getCurrentHp());
     }
 
     @Test // Check to reject negative mana consumption
     void shouldRejectNegativeManaConsumption(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
 
-        int initialMana = mage.getCurrentMana();
+        int initialMana = character.getCurrentMana();
         int invalidMana = -20;
 
-        assertThrows(IllegalArgumentException.class, () -> mage.useMana(invalidMana));
+        assertThrows(IllegalArgumentException.class, () -> character.useMana(invalidMana));
 
-        assertEquals(initialMana, mage.getCurrentMana());
+        assertEquals(initialMana, character.getCurrentMana());
     }
 
     @Test // Check to reject negative mana requirement
     void shouldRejectNegativeManaRequirement(){
-        Character mage = new Mage("Merlin");
+        Character character = new Mage("Test Character");
 
         int invalidManaCost = -20;
 
-        assertThrows(IllegalArgumentException.class, () -> mage.hasEnoughmana(invalidManaCost));
+        assertThrows(IllegalArgumentException.class, () -> character.hasEnoughmana(invalidManaCost));
     }
 
     @Test // Check when zero damage dealt, maintain health
     void shouldMaintainHealthWhenDamageIsZero(){
-        Character warrior = new Warrior("Arthur");
+        Character character = new TestCharacter("Test Character");
 
-        int initialHp = warrior.getCurrentHp();
+        int initialHp = character.getCurrentHp();
 
-        warrior.takeDamage(0);
+        character.takeDamage(0);
 
-        assertEquals(initialHp, warrior.getCurrentHp());
+        assertEquals(initialHp, character.getCurrentHp());
     }
 
     @Test // Check when zero heal done, maintain health
     void shouldMaintainHealthWhenHealIsZero(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
 
-        int damage = mage.getCurrentHp() / 2;
-        mage.takeDamage(damage);
+        int damage = character.getCurrentHp() / 2;
+        character.takeDamage(damage);
 
-        int initialHp = mage.getCurrentHp();
+        int initialHp = character.getCurrentHp();
 
-        mage.heal(0);
+        character.heal(0);
 
-        assertEquals(initialHp, mage.getCurrentHp());
+        assertEquals(initialHp, character.getCurrentHp());
     }
 
     @Test // Check when zero mana consume, mana maintain
     void shouldMaintainManaWhenCostIsZero(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
 
-        int initialMana = mage.getCurrentMana();
+        int initialMana = character.getCurrentMana();
 
-        mage.useMana(0);
+        character.useMana(0);
 
-        assertEquals(initialMana, mage.getCurrentMana());
+        assertEquals(initialMana, character.getCurrentMana());
     }
 
     @Test // Check character still can use zero mana skills
     void shouldHaveEnoughManaForZeroCost(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
         
-        mage.useMana(mage.getCurrentMana());
+        character.useMana(character.getCurrentMana());
 
-        boolean hasEnoughMana = mage.hasEnoughmana(0);
+        boolean hasEnoughMana = character.hasEnoughmana(0);
 
         assertTrue(hasEnoughMana);
     }
 
     @Test // Check for integer overflow for healing
     void shouldPreventIntegerOverflowWhenHealing(){
-        Character mage = new Mage("Merlin");
+        Character character = new TestCharacter("Test Character");
 
-        int damage = mage.getMaxHp() / 2;
-        mage.takeDamage(damage);
+        int damage = character.getMaxHp() / 2;
+        character.takeDamage(damage);
 
         int healingAmount = Integer.MAX_VALUE;
-        int expectedHp = mage.getMaxHp();
+        int expectedHp = character.getMaxHp();
 
-        mage.heal(healingAmount);
+        character.heal(healingAmount);
 
-        assertEquals(expectedHp, mage.getCurrentHp());
+        assertEquals(expectedHp, character.getCurrentHp());
     }
 
     @Test // Check to not allow adding skills using getters
@@ -293,7 +295,7 @@ class CharacterTest {
 
     @Test // Check revive character
     void shouldNotReviveDefeatedCharacterThroughHealing(){
-        Character character = new Warrior("Arthur");
+        Character character = new TestCharacter("Test Character");
         
         int lethalDamage = character.getCurrentHp();
         character.takeDamage(lethalDamage);
