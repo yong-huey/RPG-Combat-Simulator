@@ -28,12 +28,13 @@ public class HealSkill extends AbstractSkill{
         }
 
         caster.useMana(getManaCost());
-
+        int initialHp = target.getCurrentHp();
         target.heal(healAmount);
+        int actualHealing = target.getCurrentHp() - initialHp;
 
         return new SkillResult(
                 true, caster.getName() + " used " + getName() + " and healed "
-                + target.getName() + " for " + healAmount + " HP."
+                + target.getName() + " for " + actualHealing + " HP."
             );
     }
 }

@@ -30,18 +30,25 @@ public class DamageSkill extends AbstractSkill{
 
         caster.useMana(getManaCost());
 
-        int damage = baseDamage + caster.getAttack() - target.getDefense();
+        long calculateDamage = (long) baseDamage + caster.getAttack() - target.getDefense();
 
-        if(damage < 1){
-            damage = 1;
+        if(calculateDamage < 1){
+            calculateDamage = 1;
         }
 
+        if(calculateDamage > Integer.MAX_VALUE){
+            calculateDamage = Integer.MAX_VALUE;
+        }
+        
+        int damage = (int) calculateDamage;
+        int initialHp = target.getCurrentHp();
         target.takeDamage(damage);
+        int actualDamage = initialHp - target.getCurrentHp();
 
         return new SkillResult(
                 true, 
                 caster.getName() + " used " + getName() + " and dealt "
-                + damage + " damage to " + target.getName()
+                + actualDamage + " damage to " + target.getName()
             );
     }
 }

@@ -85,7 +85,14 @@ public abstract class Character{
 
     public void heal(int amount){
         validateNonNegative(amount, "Healing");
-        currentHp += Math.min(amount, maxHp - currentHp);
+        if(!isAlive()) return;
+        int missingHp = maxHp - currentHp;
+        if(amount > missingHp){
+            currentHp = maxHp;
+        }
+        else{
+            currentHp += amount;
+        }
     }
 
     public boolean isAlive(){
