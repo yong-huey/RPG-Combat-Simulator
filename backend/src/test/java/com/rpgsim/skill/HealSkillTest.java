@@ -1,8 +1,8 @@
 package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
-import com.rpgsim.model.Mage;
 import com.rpgsim.enums.TargetType;
+import com.rpgsim.fixture.TestCharacter;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +11,7 @@ class HealSkillTest {
     @Test // Check correct healing amount
     void shouldRestoreCorrectAmountOfHealth(){
         // Arrange
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int damage = caster.getMaxHp() / 2;
         int healAmount = damage / 2;
@@ -33,7 +33,7 @@ class HealSkillTest {
 
     @Test // Check for correct mana consumption
     void shouldConsumeCorrectMana(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int initialMana = caster.getCurrentMana();
         int manaCost = initialMana / 4;
@@ -52,7 +52,7 @@ class HealSkillTest {
 
     @Test // Check heal dont exceed max health
     void shouldNotHealBeyondMaximumHealth(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int damage = caster.getMaxHp() / 4;
         int healAmount = damage * 2;
@@ -70,7 +70,7 @@ class HealSkillTest {
 
     @Test // Check heal at full health should not increase health
     void shouldMaintainHealthWhenAlreadyFull(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int initialHp = caster.getCurrentHp();
         int healAmount = caster.getMaxHp() / 4;
@@ -85,7 +85,7 @@ class HealSkillTest {
 
     @Test // Check if insufficient mana cannot heal
     void shouldNotHealWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int additonalManaRequired = 1;
         int manaCost = caster.getCurrentMana() + additonalManaRequired;
@@ -106,7 +106,7 @@ class HealSkillTest {
 
     @Test // Check insufficent mana should preserve mana
     void shouldNotConsumeManaWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int initialMana = caster.getCurrentMana();
         int additonalManaRequired = 1;
@@ -137,7 +137,7 @@ class HealSkillTest {
 
     @Test // Check zero mana heal can be done
     void shouldExecuteZeroCostHealWithoutMana(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         caster.useMana(caster.getCurrentMana());
 
@@ -225,7 +225,7 @@ class HealSkillTest {
 
     @Test // Check to report actual heal
     void shouldReportActualHealingWhenOverhealing(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int damage = caster.getCurrentHp() / 2;
         caster.takeDamage(damage);
@@ -250,7 +250,7 @@ class HealSkillTest {
 
     @Test // Check to report no healing when full health
     void shouldReportZeroHealingWhenAtFullHealth(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
         
         int initialHp = caster.getCurrentHp();
         int manaCost = caster.getCurrentMana();
@@ -273,7 +273,7 @@ class HealSkillTest {
 
     @Test // Check to allow zero healing
     void shouldMaintainHealthWhenExecutingZeroHealingSkill(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int damage = caster.getCurrentHp() / 2;
         caster.takeDamage(damage);
@@ -295,7 +295,7 @@ class HealSkillTest {
 
     @Test // Check successful healing skill result
     void shouldReturnSuccessWhenHealSkillExecuted(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
         int damage = caster.getCurrentHp() / 2;
         caster.takeDamage(damage);
 
@@ -314,7 +314,7 @@ class HealSkillTest {
 
     @Test // Check failed healing skill result
     void shouldReturnFailureWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
         int additionalManaRequired = 1;
         int manaCost = caster.getCurrentMana() + additionalManaRequired;
         int healAmount = 20;
@@ -331,7 +331,7 @@ class HealSkillTest {
 
     @Test // Check defeated caster cannot heal
     void shouldRejectHealingSkillFromDefeatedCaster(){
-        Character caster = new Mage("Merlin");
+        Character caster = new TestCharacter("Caster");
 
         int lethalDamage = caster.getCurrentHp();
         caster.takeDamage(lethalDamage);
