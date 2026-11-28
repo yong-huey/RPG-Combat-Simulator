@@ -402,4 +402,35 @@ class HealSkillTest {
         assertEquals(initialHp, caster.getCurrentHp());
         assertEquals(initialMana, caster.getCurrentMana());
     }
+
+    @Test // Check to reject heal skill from targeting another character
+    void shouldRejectSelfHealSkillTargetingAnotherCharacter(){
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
+
+        String skillName = "Test Heal Skill";
+        int manaCost = 10;
+        int healAmount = 20;
+        int damage = 30;
+
+        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+
+        caster.takeDamage(damage);
+        target.takeDamage(damage);
+
+        int initialCasterHp = caster.getCurrentHp();
+        int initialCasterMana = caster.getCurrentMana();
+        int initialTargetHp = target.getCurrentHp();
+        int initialTargetMana = target.getCurrentMana();
+
+        SkillResult result = skill.execute(caster, target);
+
+        assertFalse(result.isSuccess());
+
+        assertEquals(initialCasterHp, caster.getCurrentHp());
+        assertEquals(initialCasterMana, caster.getCurrentMana());
+
+        assertEquals(initialTargetHp, target.getCurrentHp());
+        assertEquals(initialTargetMana, target.getCurrentMana());
+    }
 }

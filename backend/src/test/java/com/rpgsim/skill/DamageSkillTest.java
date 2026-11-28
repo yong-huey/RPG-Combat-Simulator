@@ -394,4 +394,23 @@ class DamageSkillTest {
         assertEquals(initialHp, caster.getCurrentHp());
         assertEquals(initialMana, caster.getCurrentMana());
     }
+
+    @Test // Check to reject damage skill targeting self
+    void shouldRejectEnemyDamageSkillTargetingSelf(){
+        Character caster = new TestCharacter("Caster");
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+
+        int initialHp = caster.getCurrentHp();
+        int initialMana = caster.getCurrentMana();
+
+        SkillResult result = skill.execute(caster, caster);
+
+        assertFalse(result.isSuccess());
+        assertEquals(initialHp, caster.getCurrentHp());
+        assertEquals(initialMana, caster.getCurrentMana());
+    }
 }
