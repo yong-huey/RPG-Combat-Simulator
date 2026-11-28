@@ -1,9 +1,6 @@
 package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
-
-import java.lang.annotation.Target;
-
 import com.rpgsim.enums.TargetType;
 
 public abstract class AbstractSkill implements Skill{
