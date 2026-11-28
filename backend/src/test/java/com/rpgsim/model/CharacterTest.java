@@ -472,4 +472,15 @@ class CharacterTest {
 
         assertEquals(speed, character.getSpeed());
     }
+
+    @Test // Check to reject null skill addition
+    void shouldRejectNullSkillAddition(){
+        Character character = new TestCharacter("Test Character");
+        List<Skill> originalSkills = character.getSkills();
+        Skill invalidSkillName = null;
+
+        assertThrows(IllegalArgumentException.class, () -> character.addSkill(invalidSkillName));
+
+        assertEquals(originalSkills, character.getSkills());
+    }
 }
