@@ -30,6 +30,22 @@ public abstract class Character{
         int defense,
         int speed
     ){
+        // Validate character name
+        if(name == null || name.isBlank()){
+            throw new IllegalArgumentException("Character name cannot be null or blank.");
+        }
+        
+        // Validate character maximum hp
+        if(maxHp <= 0){
+            throw new IllegalArgumentException("Maximum HP must be greater than zero.");
+        }
+
+        // Validate non-negative
+        validateNonNegative(maxMana, "Maximum Mana");
+        validateNonNegative(attack, "Attack");
+        validateNonNegative(defense, "Defense");
+        validateNonNegative(speed, "Speed");
+
         this.name = name;
         
         this.maxHp = maxHp;
@@ -42,12 +58,7 @@ public abstract class Character{
         this.defense = defense;
         this.speed = speed;
 
-        addSkill(new DamageSkill(
-            "Basic Attack",
-            0,
-            5
-        ));
-
+        addSkill(new DamageSkill("Basic Attack", 0, 5));
     }
 
     private void validateNonNegative(int amount, String fieldName){
