@@ -8,18 +8,17 @@ public class DamageSkill extends AbstractSkill{
     private final int baseDamage;
 
     public DamageSkill(String name, int manaCost, int baseDamage){
-        super(name, manaCost);
+        this(name, manaCost, baseDamage, TargetType.ENEMY);
+    }
+
+    public DamageSkill(String name, int manaCost, int baseDamage, TargetType targetType){
+        super(name, manaCost, targetType);
 
         if(baseDamage < 0){
             throw new IllegalArgumentException("Base damage cannot be negative.");
         }
 
         this.baseDamage = baseDamage;
-    }
-
-    @Override
-    public TargetType getTargetType() {
-        return TargetType.ENEMY;
     }
 
     @Override

@@ -413,7 +413,7 @@ class HealSkillTest {
         int healAmount = 20;
         int damage = 30;
 
-        Skill skill = new HealSkill(skillName, manaCost, healAmount);
+        Skill skill = new HealSkill(skillName, manaCost, healAmount, TargetType.SELF);
 
         caster.takeDamage(damage);
         target.takeDamage(damage);

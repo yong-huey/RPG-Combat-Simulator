@@ -402,7 +402,7 @@ class DamageSkillTest {
         int manaCost = 10;
         int baseDamage = 20;
 
-        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage, TargetType.ENEMY);
 
         int initialHp = caster.getCurrentHp();
         int initialMana = caster.getCurrentMana();

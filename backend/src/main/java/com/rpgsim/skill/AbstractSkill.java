@@ -2,20 +2,29 @@ package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
 
+import java.lang.annotation.Target;
+
+import com.rpgsim.enums.TargetType;
+
 public abstract class AbstractSkill implements Skill{
     private final String name;
     private final int manaCost;
+    private final TargetType targetType;
 
-    protected AbstractSkill(String name, int manaCost){
+    protected AbstractSkill(String name, int manaCost, TargetType targetType){
         if (name == null || name.isBlank()){
             throw new IllegalArgumentException("Skill name cannot be null or blank.");
         }
         if (manaCost < 0){
             throw new IllegalArgumentException("Mana cost cannot be negative.");
         }
+        if(targetType == null){
+            throw new IllegalArgumentException("Target type cannot be null.");
+        }
 
         this.name = name;
         this.manaCost = manaCost;
+        this.targetType = targetType;
     }
 
     @Override
@@ -26,6 +35,11 @@ public abstract class AbstractSkill implements Skill{
     @Override 
     public int getManaCost(){
         return manaCost;
+    }
+
+    @Override 
+    public final TargetType getTargetType(){
+        return targetType;
     }
 
     protected SkillResult validateExecution(Character caster, Character target){
