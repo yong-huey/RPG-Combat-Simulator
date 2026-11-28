@@ -29,6 +29,12 @@ public abstract class AbstractSkill implements Skill{
     }
 
     protected SkillResult validateExecution(Character caster, Character target){
+        if(caster == null){
+            return new SkillResult(false, "Caster cannot be null.");
+        }
+        if(target == null){
+            return new SkillResult(false, "Target cannot be null.");
+        }
         if(!caster.isAlive()){
             return new SkillResult(false, caster.getName() + " is defeated and cannot use skills.");
         }
