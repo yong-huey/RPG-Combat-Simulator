@@ -35,7 +35,7 @@ public abstract class AbstractSkill implements Skill{
         if(!target.isAlive()){
             return new SkillResult(false, target.getName() + " is already defeated.");
         }
-        if(!caster.hasEnoughmana(getManaCost())){
+        if(!caster.hasEnoughMana(getManaCost())){
             return new SkillResult(false, caster.getName() + " has insufficient mana.");
         }
         return new SkillResult(true, "Skill execution validated successfully.");

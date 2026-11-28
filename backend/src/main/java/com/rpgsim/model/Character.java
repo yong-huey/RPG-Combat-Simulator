@@ -99,13 +99,13 @@ public abstract class Character{
         return currentHp > 0;
     }
 
-    public boolean hasEnoughmana(int manaCost){
+    public boolean hasEnoughMana(int manaCost){
         validateNonNegative(manaCost, "Mana cost");
         return currentMana >= manaCost;
     }
 
     public void useMana(int amount){
-        if(!hasEnoughmana(amount)){
+        if(!hasEnoughMana(amount)){
             throw new IllegalArgumentException("Not Enough Mana");
         }
 

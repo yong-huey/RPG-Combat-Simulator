@@ -286,7 +286,7 @@ class DamageSkillTest {
     }
 
     @Test // Check failed damage skill result
-    void shouldReturnFailedWhenManaIsInsufficient(){
+    void shouldReturnFailureWhenManaIsInsufficient(){
         Character caster = new TestCharacter("Caster");
         Character target = new TestCharacter("Target");
 

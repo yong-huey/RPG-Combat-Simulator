@@ -137,11 +137,11 @@ class CharacterTest {
 
     @Test // Check to reject negative mana requirement
     void shouldRejectNegativeManaRequirement(){
-        Character character = new Mage("Test Character");
+        Character character = new TestCharacter("Test Character");
 
         int invalidManaCost = -20;
 
-        assertThrows(IllegalArgumentException.class, () -> character.hasEnoughmana(invalidManaCost));
+        assertThrows(IllegalArgumentException.class, () -> character.hasEnoughMana(invalidManaCost));
     }
 
     @Test // Check when zero damage dealt, maintain health
@@ -186,7 +186,7 @@ class CharacterTest {
         
         character.useMana(character.getCurrentMana());
 
-        boolean hasEnoughMana = character.hasEnoughmana(0);
+        boolean hasEnoughMana = character.hasEnoughMana(0);
 
         assertTrue(hasEnoughMana);
     }

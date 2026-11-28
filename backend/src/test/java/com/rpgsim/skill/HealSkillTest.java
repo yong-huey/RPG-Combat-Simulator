@@ -87,8 +87,8 @@ class HealSkillTest {
     void shouldNotHealWhenManaIsInsufficient(){
         Character caster = new TestCharacter("Caster");
 
-        int additonalManaRequired = 1;
-        int manaCost = caster.getCurrentMana() + additonalManaRequired;
+        int additionalManaRequired = 1;
+        int manaCost = caster.getCurrentMana() + additionalManaRequired;
 
         int damage = caster.getMaxHp() / 2;
         int healAmount = damage / 2;
@@ -109,8 +109,8 @@ class HealSkillTest {
         Character caster = new TestCharacter("Caster");
 
         int initialMana = caster.getCurrentMana();
-        int additonalManaRequired = 1;
-        int manaCost = caster.getCurrentMana() + additonalManaRequired;
+        int additionalManaRequired = 1;
+        int manaCost = caster.getCurrentMana() + additionalManaRequired;
 
         int healAmount = caster.getMaxHp() / 4;
 
