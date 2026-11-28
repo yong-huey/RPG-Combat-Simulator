@@ -346,4 +346,52 @@ class DamageSkillTest {
         assertEquals(initialMana, caster.getCurrentMana());
         assertEquals(0, target.getCurrentHp());
     }
+
+    @Test // Check to reject null caster
+    void shouldRejectNullCaster(){
+        Character caster = null;
+        Character target = new TestCharacter("Target");
+
+        int initialHp = target.getCurrentHp();
+        int initialMana = target.getCurrentMana();
+
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+        
+        SkillResult result = assertDoesNotThrow(() -> skill.execute(caster, target));
+
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+
+        assertEquals(initialHp, target.getCurrentHp());
+        assertEquals(initialMana, target.getCurrentMana());
+    }
+
+    @Test // Check to reject null target
+    void shouldRejectNullTarget(){
+        Character caster = new TestCharacter("Caster");
+        Character target = null;
+
+        int initialHp = caster.getCurrentHp();
+        int initialMana = caster.getCurrentMana();
+
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        Skill skill = new DamageSkill(skillName, manaCost, baseDamage);
+        
+        SkillResult result = assertDoesNotThrow(() -> skill.execute(caster, target));
+
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getMessage());
+        assertFalse(result.getMessage().isBlank());
+
+        assertEquals(initialHp, caster.getCurrentHp());
+        assertEquals(initialMana, caster.getCurrentMana());
+    }
 }
