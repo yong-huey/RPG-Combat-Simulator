@@ -13,8 +13,8 @@ class DamageSkillTest {
     @Test // Check correct damage dealt
     void shouldDealCorrectDamage(){
         // Arrange
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int manaCost = 20;
         int baseDamage = target.getDefense() + 10;
@@ -34,8 +34,8 @@ class DamageSkillTest {
 
     @Test // Check correct mana consumption
     void shouldConsumeCorrectMana(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int manaCost = 20;
         int baseDamage = 35;
@@ -79,8 +79,8 @@ class DamageSkillTest {
 
     @Test // Check insufficient mana deal no damage
     void shouldNotDealDamageWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int manaCost = caster.getCurrentMana() + 1;
         int baseDamage = 35;
@@ -95,8 +95,8 @@ class DamageSkillTest {
 
     @Test // Check insufficient mana should not consume mana
     void shouldNotConsumeManaWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int initialMana = caster.getCurrentMana();
         int manaCost = initialMana + 1;
@@ -111,8 +111,8 @@ class DamageSkillTest {
 
     @Test // Check lethal damage
     void shouldDefeatTargetWhenDamageIsLethal(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int manaCost = 0;
         int baseDamage = target.getCurrentHp() + target.getDefense();
@@ -139,8 +139,8 @@ class DamageSkillTest {
 
     @Test // Check zero mana skill can be dealt
     void shouldExecuteZeroCostSkillWithoutMana(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         caster.useMana(caster.getCurrentMana());
 
@@ -248,8 +248,8 @@ class DamageSkillTest {
 
     @Test // Check to report actual damage
     void shouldReportActualDamageDealt(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int initialHp = target.getCurrentHp();
 
@@ -271,8 +271,8 @@ class DamageSkillTest {
 
     @Test // Check successful damage skill result
     void shouldReturnSuccessWhenDamageSkillExecutes(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         String skillName = "Test Damage Skill";
         int manaCost = caster.getCurrentMana() / 2;
@@ -289,8 +289,8 @@ class DamageSkillTest {
 
     @Test // Check failed damage skill result
     void shouldReturnFailedWhenManaIsInsufficient(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int additionalManaRequired = 1;
         int manaCost = caster.getCurrentMana() + additionalManaRequired;
@@ -307,8 +307,8 @@ class DamageSkillTest {
 
     @Test // Check defeated caster cannot attack
     void shouldRejectDamageSkillFromDefeatedCaster(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int lethalDamage = caster.getCurrentHp();
         caster.takeDamage(lethalDamage);
@@ -330,8 +330,8 @@ class DamageSkillTest {
 
     @Test // Check damage skill cannot target defeated character
     void shouldRejectDamageSkillAgainstDefeatedTarget(){
-        Character caster = new Mage("Merlin");
-        Character target = new Warrior("Arthur");
+        Character caster = new TestCharacter("Caster");
+        Character target = new TestCharacter("Target");
 
         int lethalDamage = target.getCurrentHp();
         target.takeDamage(lethalDamage);
