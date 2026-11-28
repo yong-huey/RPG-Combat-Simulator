@@ -5,24 +5,14 @@ import java.util.List;
 import com.rpgsim.model.Character;
 import com.rpgsim.model.Warrior;
 import com.rpgsim.model.Mage;
-import com.rpgsim.model.Archer;
 import com.rpgsim.skill.Skill;
 import com.rpgsim.skill.DamageSkill;
+import com.rpgsim.fixture.TestCharacter;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BattleTest {
-    private static class TestCharacter extends Character{
-        private static final int TEST_MAX_HP = 100;
-        private static final int TEST_MAX_MANA = 100;
-        private static final int TEST_ATTACK = 20;
-        private static final int TEST_DEFENSE = 10;
-        TestCharacter(String name, int speed){
-            super(name, TEST_MAX_HP, TEST_MAX_MANA, TEST_ATTACK, TEST_DEFENSE, speed);
-        }
-    }
-
     @Test // Check if start and no winner
     void shouldStartWithActiveBattleAndNoWinner(){
         // Arrange
@@ -59,7 +49,7 @@ class BattleTest {
         int fasterSpeed = 20;
 
         Character attacker = new TestCharacter("Attacker", fasterSpeed);
-        Character defender = new TestCharacter("Defenser", slowerSpeed);
+        Character defender = new TestCharacter("Defender", slowerSpeed);
 
         Battle battle = new Battle(attacker, defender);
 
@@ -87,10 +77,10 @@ class BattleTest {
 
     @Test // Check invalid skill should not switch turn
     void shouldNotSwitchTurnWhenSkillDoesNotExist(){
-        Character mage = new Mage("Merlin");
-        Character warrior = new Warrior("Arthur");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(mage, warrior);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character initialTurn = battle.getCurrentTurn();
         Character opponent = battle.getOpponent();
@@ -104,10 +94,10 @@ class BattleTest {
 
     @Test // Check no self attack
     void shouldRejectEnemySkillTargetingSelf(){
-        Character mage = new Mage("Merlin");
-        Character warrior = new Warrior("Arthur");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(mage, warrior);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character caster = battle.getCurrentTurn();
 
@@ -122,9 +112,9 @@ class BattleTest {
 
     @Test // Check no healing of enemy
     void shouldRejectSelfSkillTargetingEnemy(){
-        Character mage = new Mage("Merlin");
+        Character caster = new Mage("Merlin");
         
-        int slowerSpeed = mage.getSpeed() - 1;
+        int slowerSpeed = caster.getSpeed() - 1;
 
         Character opponent = new TestCharacter("Opponent", slowerSpeed);
 
@@ -132,26 +122,26 @@ class BattleTest {
         opponent.takeDamage(damage);
 
         int initialHp = opponent.getCurrentHp();
-        int initialMana = mage.getCurrentMana();
+        int initialMana = caster.getCurrentMana();
 
-        Battle battle = new Battle(mage, opponent);
+        Battle battle = new Battle(caster, opponent);
 
         String skill = "Heal";
 
         battle.useSkill(skill, opponent);
 
         assertEquals(initialHp, opponent.getCurrentHp());
-        assertEquals(initialMana, mage.getCurrentMana());
-        assertSame(mage, battle.getCurrentTurn());
+        assertEquals(initialMana, caster.getCurrentMana());
+        assertSame(caster, battle.getCurrentTurn());
     }
 
     @Test // Check no damage to external characters
     void shouldRejectTargetOutsideBattle(){
-        Character mage = new Mage("Merlin");
-        Character warrior = new Warrior("Arthur");
-        Character outsider = new Archer("Robin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
+        Character outsider = new TestCharacter("Outsider");
 
-        Battle battle = new Battle(mage, warrior);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character initialTurn = battle.getCurrentTurn();
 
@@ -211,10 +201,10 @@ class BattleTest {
 
     @Test // Check battle log does record
     void shouldRecordSuccessfulActionInBattleLog(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         int initialLogSize = battle.getBattleLog().size();
 
@@ -290,10 +280,10 @@ class BattleTest {
 
     @Test // Check to not allow external logging
     void shouldPreventExternalBattleLogAddition(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         List<String> battleLog = battle.getBattleLog();
 
@@ -308,10 +298,10 @@ class BattleTest {
 
     @Test // Check to not allow external clearing of log
     void shouldPreventExternalBattleLogClearing(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         String skillName = "Basic Attack";
 
@@ -330,10 +320,10 @@ class BattleTest {
 
     @Test // Check previous retrieved remains
     void shouldReturnIndependentBattleLogSnapshot(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         List<String> originalLog = battle.getBattleLog();
         int originalLogSize = originalLog.size();
@@ -347,80 +337,80 @@ class BattleTest {
     }
 
     @Test // Check same speed player 1 to start first
-    void shouldAllowPlayerOneToStartWhenSpeedAreEqual(){
+    void shouldAllowPlayerOneToStartWhenSpeedsAreEqual(){
         int sharedSpeed = 10;
-        Character player1 = new TestCharacter("Player 1", sharedSpeed);
-        Character player2 = new TestCharacter("Player 2", sharedSpeed);
+        Character playerOne = new TestCharacter("Player 1", sharedSpeed);
+        Character playerTwo = new TestCharacter("Player 2", sharedSpeed);
 
-        Battle battle = new Battle(player1, player2);
+        Battle battle = new Battle(playerOne, playerTwo);
 
-        assertSame(player1, battle.getCurrentTurn());
+        assertSame(playerOne, battle.getCurrentTurn());
     }
 
     @Test // Check null player 1
     void shouldRejectNullPlayerOne(){
-        Character player1 = null;
-        Character player2 = new Mage("Merlin");
+        Character playerOne = null;
+        Character playerTwo = new TestCharacter("Test Character");
 
-        assertThrows(IllegalArgumentException.class, () -> new Battle(player1, player2));
+        assertThrows(IllegalArgumentException.class, () -> new Battle(playerOne, playerTwo));
     }
 
     @Test // Check null player 2
     void shouldRejectNullPlayerTwo(){
-        Character player1 = new Mage("Merlin");
-        Character player2 = null;
+        Character playerOne = new TestCharacter("Test Character");
+        Character playerTwo = null;
 
-        assertThrows(IllegalArgumentException.class, () -> new Battle(player1, player2));
+        assertThrows(IllegalArgumentException.class, () -> new Battle(playerOne, playerTwo));
     }
 
     @Test // Check no fight against self
-    void shouldRejectSameCharacterAsBothPlayer(){
-        Character warrior = new Warrior("Arthur");
+    void shouldRejectSameCharacterAsBothPlayers(){
+        Character player = new TestCharacter("Test Character");
 
-        assertThrows(IllegalArgumentException.class, () -> new Battle(warrior, warrior));
+        assertThrows(IllegalArgumentException.class, () -> new Battle(player, player));
     }
 
     @Test // Check allow same class
     void shouldAllowDifferentCharactersOfSameClass(){
-        Character player1 = new Warrior("Arthur");
-        Character player2 = new Warrior("Lancelot");
+        Character playerOne = new Warrior("Arthur");
+        Character playerTwo = new Warrior("Lancelot");
 
-        Battle battle = assertDoesNotThrow(() -> new Battle(player1, player2));
+        Battle battle = assertDoesNotThrow(() -> new Battle(playerOne, playerTwo));
 
         assertFalse(battle.isBattleOver());
-        assertNotSame(player1, player2);
+        assertNotSame(playerOne, playerTwo);
     }
 
     @Test // Check to reject player 1 die before battle
     void shouldRejectDefeatedPlayerOne(){
-        Character player1 = new Warrior("Arthur");
-        Character player2 = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        int lethalDamage = player1.getCurrentHp();
+        int lethalDamage = playerOne.getCurrentHp();
 
-        player1.takeDamage(lethalDamage);
+        playerOne.takeDamage(lethalDamage);
 
-        assertThrows(IllegalArgumentException.class, () -> new Battle(player1, player2));
+        assertThrows(IllegalArgumentException.class, () -> new Battle(playerOne, playerTwo));
     } 
 
     @Test // Check to reject player 2 die before battle
     void shouldRejectDefeatedPlayerTwo(){
-        Character player1 = new Warrior("Arthur");
-        Character player2 = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        int lethalDamage = player2.getCurrentHp();
+        int lethalDamage = playerTwo.getCurrentHp();
 
-        player2.takeDamage(lethalDamage);
+        playerTwo.takeDamage(lethalDamage);
 
-        assertThrows(IllegalArgumentException.class, () -> new Battle(player1, player2));
+        assertThrows(IllegalArgumentException.class, () -> new Battle(playerOne, playerTwo));
     } 
 
     @Test // Check to reject null target
     void shouldRejectNullSkillTarget(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character currentPlayer = battle.getCurrentTurn();
         Character opponent = battle.getOpponent();
@@ -445,10 +435,10 @@ class BattleTest {
 
     @Test // Check to reject null skill name
     void shouldRejectNullSkillName(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character currentPlayer = battle.getCurrentTurn();
         Character opponent = battle.getOpponent();
@@ -472,10 +462,10 @@ class BattleTest {
 
     @Test // Check to reject blank skill name
     void shouldRejectBlankSkillName(){
-        Character warrior = new Warrior("Arthur");
-        Character mage = new Mage("Merlin");
+        Character playerOne = new TestCharacter("Player 1");
+        Character playerTwo = new TestCharacter("Player 2");
 
-        Battle battle = new Battle(warrior, mage);
+        Battle battle = new Battle(playerOne, playerTwo);
 
         Character currentPlayer = battle.getCurrentTurn();
         Character opponent = battle.getOpponent();
