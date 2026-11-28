@@ -1,8 +1,6 @@
 package com.rpgsim.skill;
 
 import com.rpgsim.model.Character;
-import com.rpgsim.model.Warrior;
-import com.rpgsim.model.Mage;
 import com.rpgsim.enums.TargetType;
 import com.rpgsim.fixture.TestCharacter;
 
