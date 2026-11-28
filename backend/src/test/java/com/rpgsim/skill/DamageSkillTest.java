@@ -413,4 +413,26 @@ class DamageSkillTest {
         assertEquals(initialHp, caster.getCurrentHp());
         assertEquals(initialMana, caster.getCurrentMana());
     }
+
+    @Test // Check configurable target type
+    void shouldAllowConfigurableTargetType(){
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 20;
+
+        for(TargetType targetType : TargetType.values()){
+            Skill skill = new DamageSkill(skillName, manaCost, baseDamage, targetType);
+            assertEquals(targetType, skill.getTargetType());
+        }
+    }
+
+    @Test // Check to reject null target type
+    void shouldRejectNullTargetType(){
+        String skillName = "Test Damage Skill";
+        int manaCost = 10;
+        int baseDamage = 20;
+        TargetType invalidTargetType = null;
+
+        assertThrows(IllegalArgumentException.class, () -> new DamageSkill(skillName, manaCost, baseDamage, invalidTargetType));
+    }
 }

@@ -433,4 +433,28 @@ class HealSkillTest {
         assertEquals(initialTargetHp, target.getCurrentHp());
         assertEquals(initialTargetMana, target.getCurrentMana());
     }
+
+    @Test // Check configurable target types
+    void shouldAllowConfigurableTargetTypes(){
+        String skillName = "Test Heal Skill";
+        int manaCost = 10;
+        int healAmount = 20;
+
+        for(TargetType targetType : TargetType.values()){
+            Skill skill = new HealSkill(skillName, manaCost, healAmount, targetType);
+
+            // Assert
+            assertEquals(targetType, skill.getTargetType());
+        }
+    }
+
+    @Test // Check to reject null target type
+    void shouldRejectNullTargetType(){
+        String skillName = "Test Heal Skill";
+        int manaCost = 10;
+        int healAmount = 20;
+        TargetType invalidTargetType = null;
+
+        assertThrows(IllegalArgumentException.class, () -> new HealSkill(skillName, manaCost, healAmount, invalidTargetType));
+    }
 }
