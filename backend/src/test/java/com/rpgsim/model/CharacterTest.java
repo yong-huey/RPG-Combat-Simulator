@@ -307,4 +307,169 @@ class CharacterTest {
         assertEquals(0, character.getCurrentHp());
         assertFalse(character.isAlive());
     }
+
+    @Test // Check to reject null character name
+    void shouldRejectNullCharacterName(){
+        String invalidName = null;
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(invalidName, maxHp, maxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject empty character name
+    void shouldRejectEmptyCharacterName(){
+        String invalidName = "";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(invalidName, maxHp, maxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject blank character name
+    void shouldRejectBlankCharacterName(){
+        String invalidName = "   ";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(invalidName, maxHp, maxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject negative maximum hp
+    void shouldRejectNegativeMaxHp(){
+        String name = "Test Character";
+        int invalidMaxHp = -100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, invalidMaxHp, maxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject zero maximum hp
+    void shouldRejectZeroMaxHp(){
+        String name = "Test Character";
+        int invalidMaxHp = 0;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, invalidMaxHp, maxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject negative maximum mana
+    void shouldRejectNegativeMaxMana(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int invalidMaxMana = -100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, maxHp, invalidMaxMana, attack, defense, speed));
+    }
+
+    @Test // Check to reject negative attack
+    void shouldRejectNegativeAttack(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int invalidAttack = -20;
+        int defense = 10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, maxHp, maxMana, invalidAttack, defense, speed));
+    }
+    
+    @Test // Check to reject negative defense
+    void shouldRejectNegativeDefense(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int invalidDefense = -10;
+        int speed = 10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, maxHp, maxMana, attack, invalidDefense, speed));
+    }
+
+    @Test // Check to reject negative speed
+    void shouldRejectNegativeSpeed(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int invalidSpeed = -10;
+
+        assertThrows(IllegalArgumentException.class, () -> new TestCharacter(name, maxHp, maxMana, attack, defense, invalidSpeed));
+    }
+
+    @Test // Check to allow zero maximum mana
+    void shouldAllowZeroMaxMana(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 0;
+        int attack = 20;
+        int defense = 10;
+        int speed = 10;
+
+        Character character = assertDoesNotThrow(() -> new TestCharacter(name, maxHp, maxMana, attack, defense, speed));
+
+        assertEquals(maxMana, character.getMaxMana());
+        assertEquals(maxMana, character.getCurrentMana());
+    }
+
+    @Test // Check to allow zero attack
+    void shouldAllowZeroAttack(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 0;
+        int defense = 10;
+        int speed = 10;
+
+        Character character = assertDoesNotThrow(() -> new TestCharacter(name, maxHp, maxMana, attack, defense, speed));
+
+        assertEquals(attack, character.getAttack());
+    }
+
+    @Test // Check to allow zero defense
+    void shouldAllowZeroDefense(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 0;
+        int speed = 10;
+
+        Character character = assertDoesNotThrow(() -> new TestCharacter(name, maxHp, maxMana, attack, defense, speed));
+
+        assertEquals(defense, character.getDefense());
+    }
+
+    @Test // Check to allow zero speed
+    void shouldAllowZeroSpeed(){
+        String name = "Test Character";
+        int maxHp = 100;
+        int maxMana = 100;
+        int attack = 20;
+        int defense = 10;
+        int speed = 0;
+
+        Character character = assertDoesNotThrow(() -> new TestCharacter(name, maxHp, maxMana, attack, defense, speed));
+
+        assertEquals(speed, character.getSpeed());
+    }
 }
