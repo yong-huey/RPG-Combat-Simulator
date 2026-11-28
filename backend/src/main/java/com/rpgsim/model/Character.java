@@ -70,6 +70,9 @@ public abstract class Character{
     }
 
     public void addSkill(Skill skill){
+        if(skill == null){
+            throw new IllegalArgumentException("Skill cannot be null.");
+        }
         skills.add(skill);
     }
 
